@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:5.0
+    container_name: marsrover-mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rover
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: marsrover-backend
+    ports:
+      - '3000:3000'
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      MONGO_URL: mongodb://root:rover@marsrover-mongo:27017/marsrover?authSource=admin
+    volumes:
+      - ./backend:/app
+    command: npm start
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: marsrover-frontend
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./frontend:/app
+    command: npm run serve
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
