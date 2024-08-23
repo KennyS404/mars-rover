@@ -14,7 +14,7 @@
 
 Before starting, ensure you meet the following requirements:
 
-- You have Node.js (version 16) installed via nvm
+- You have Node.js (version 16 or 17) installed via nvm
 - You have Yarn installed on your system
 - Docker is installed to facilitate running the project in containers
 - The recommended operating system is Linux or macOS. Windows with WSL2 is also compatible.
