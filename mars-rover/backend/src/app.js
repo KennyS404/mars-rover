@@ -7,7 +7,8 @@ const RoverController = require('./controllers/RoverController');
 app.use(cors());
 app.use(express.json());
 
-const mongoURL = process.env.MONGO_URL || 'mongodb://root:rover@marsrover-mongo:27017/marsrover?authSource=admin';
+// todo: use env instead of connections values in here att: kennildo.
+const mongoURL = 'mongodb://root:rover@marsrover-mongo:27017/marsrover?authSource=admin';
 
 mongoose.connect(mongoURL, {
   useNewUrlParser: true,
@@ -16,6 +17,7 @@ mongoose.connect(mongoURL, {
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('Failed to connect to MongoDB', err));
 
+// todo: move this route logic to roter folder
 app.post('/rovers', RoverController.deployAndMoveAllRovers);
 
 app.listen(3000, () => {
